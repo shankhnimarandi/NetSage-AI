@@ -1,0 +1,242 @@
+[
+  {
+    "case_id": 1,
+    "category": "Gateway",
+    "concept_tag": "Interface Status / Gateway Routing",
+    "symptom": "PC0 cannot reach router gateway 192.168.1.1",
+    "expected_root_cause": "Interface left in shutdown state",
+    "osi_layer": "Layer 1 "
+  },
+  {
+    "case_id": 2,
+    "category": "VLAN",
+    "concept_tag": "Trunking & Native VLAN Mismatch",
+    "symptom": "PC0 cannot ping PC1 or gateway; ping times out completely",
+    "expected_root_cause": "Native VLAN mismatch on trunk link and misconfigured PC default gateway",
+    "osi_layer": "Layer 2 "
+  },
+  {
+    "case_id": 3,
+    "category": "VLAN",
+    "concept_tag": "Access Port VLAN Assignment",
+    "symptom": "PC0 cannot ping PC1; ping results in 100% packet loss",
+    "expected_root_cause": "Access port VLAN assignment mismatch",
+    "osi_layer": "Layer 2"
+  },
+  {
+    "case_id": 4,
+    "category": "NAT",
+    "concept_tag": "Network Address Translation (NAT) Binding",
+    "symptom": "Internal hosts in VLAN 10 cannot access external public web servers; ping to public server results in 100% packet loss",
+    "expected_root_cause": "NAT inside and outside interface bindings are inverted on the router interfaces",
+    "osi_layer": "Layer 3"
+  },
+  {
+    "case_id": 5,
+    "category": "DHCP",
+    "concept_tag": "Dynamic Host Configuration Protocol (DHCP) Service",
+    "symptom": "New client PCs added to the network fail to obtain an automatic IP address via\n DHCP, resulting in an APIPA address (169.254.x.x) and complete lack of local or remote connectivity.",
+    "expected_root_cause": "DHCP service is disabled globally on the router.",
+    "osi_layer": "Layer 7"
+  },
+  {
+    "case_id": 6,
+    "category": "Routing",
+    "concept_tag": "Static Routing / Next-Hop Unreachability",
+    "symptom": "Static route configured with incorrect next-hop IP address results in complete traffic drop and \"Request timed out\" when pinging remote subnet.",
+    "expected_root_cause": "Static route configured with an invalid or unreachable next-hop IP address",
+    "osi_layer": "Layer 3"
+  },
+  {
+    "case_id": 7,
+    "category": "VLAN",
+    "concept_tag": "Access Port VLAN Assignment",
+    "symptom": "PC0 on the local network cannot ping its default gateway or other devices in its intended subnet, resulting in \"Request timed out\" errors during ping tests.",
+    "expected_root_cause": "Access port VLAN assignment mismatch isolating the host from \nits router subinterface gateway",
+    "osi_layer": "Layer 2"
+  },
+  {
+    "case_id": 8,
+    "category": "ACL",
+    "concept_tag": "Access Control List (ACL) Filtering",
+    "symptom": "Hosts in VLAN 10 (192.168.10.0/24) cannot ping devices or servers in VLAN 20 (192.168.20.0/24), resulting in \"Request timed out\" messages.",
+    "expected_root_cause": "An active Access Control List (ACL) is explicitly denying ICMP (ping) \ntraffic between VLAN subnets.",
+    "osi_layer": "Layer 3 "
+  },
+  {
+    "case_id": 9,
+    "category": "DNS",
+    "concept_tag": "DNS Configuration & Name Resolution",
+    "symptom": "Client PCs can successfully ping external IP addresses (e.g., 8.8.8.8) and direct server IPs, but fail to resolve web domain names when browsing \nwebsites (e.g., www.example.com), resulting in browser lookup errors or nslookup failures.",
+    "expected_root_cause": "DHCP pool is configured with an incorrect or unreachable DNS server IP address.",
+    "osi_layer": "Layer 7"
+  },
+  {
+    "case_id": 10,
+    "category": "VLAN",
+    "concept_tag": "Switch Port Security & Err-Disabled Recovery",
+    "symptom": "PC connected to Switch port FastEthernet0/1 suddenly loses network connectivity, and the port status shows as down.",
+    "expected_root_cause": "Switch port entered the err-disabled state because a port-security violation \noccurred when an unauthorized MAC address exceeded the allowed limit.",
+    "osi_layer": "Layer 2"
+  },
+  {
+    "case_id": 11,
+    "category": "DHCP",
+    "concept_tag": "Dynamic Host Configuration Protocol (DHCP) Service",
+    "symptom": "Client PCs configured for DHCP successfully obtain an automatic IPv4 address from the router's DHCP pool, but experience 100% packet loss and \"Request timed out\" when attempting to ping their \ndefault gateway or any remote networks.",
+    "expected_root_cause": "DHCP pool configuration is missing the default-router statement, leaving client PCs \nwithout a gateway address to forward traffic outside their local subnet",
+    "osi_layer": "Layer 7"
+  },
+  {
+    "case_id": 12,
+    "category": "Routing",
+    "concept_tag": "Static Routing & Default Gateway",
+    "symptom": "Internal hosts in VLAN 10 can ping their local gateway but experience 100% packet loss when attempting to reach external networks or public servers.",
+    "expected_root_cause": "The router lacks a default static route (0.0.0.0/0), preventing any outbound traffic\n destined for external networks from being forwarded.",
+    "osi_layer": "Layer 3"
+  },
+  {
+    "case_id": 13,
+    "category": "Gateway",
+    "concept_tag": "Interface Subnetting & IP Addressing",
+    "symptom": "Client PCs in VLAN 10 cannot reach their default gateway or other VLANs due to a subnet mismatch, resulting in 100% packet loss.",
+    "expected_root_cause": "Subinterface subnet mask mismatch restricts local gateway reachability for \nhosts on the /24 network.",
+    "osi_layer": "Layer 3"
+  },
+  {
+    "case_id": 14,
+    "category": "VLAN",
+    "concept_tag": "802.1Q Encapsulation & Inter-VLAN Routing",
+    "symptom": "Inter-VLAN communication fails with 100% packet loss because router subinterfaces lack VLAN encapsulation mapping.",
+    "expected_root_cause": "Missing 802.1Q encapsulation on router subinterfaces prevents frames from being \ncorrectly tagged and routed between VLANs.",
+    "osi_layer": "Layer 2"
+  },
+  {
+    "case_id": 15,
+    "category": "VLAN",
+    "concept_tag": "802.1Q Trunking & Switch-to-Switch Connectivity",
+    "symptom": "Cross-switch multi-VLAN traffic fails completely because the interconnect link is configured as an access port instead of a trunk.",
+    "expected_root_cause": "Missing trunk encapsulation mode on the switch-to-switch link prevents 802.1Q \ntagged frames from passing between switches.",
+    "osi_layer": "Layer 2"
+  },
+  {
+    "case_id": 16,
+    "category": "VLAN",
+    "concept_tag": "VLAN Membership & Access Port Configuration",
+    "symptom": "Workstation cannot reach its gateway or subnet because its switch port is mapped to the wrong VLAN.",
+    "expected_root_cause": "Incorrect VLAN assignment on the user access port prevents traffic from \nreaching the correct logical broadcast domain.",
+    "osi_layer": "Layer 2"
+  },
+  {
+    "case_id": 17,
+    "category": "ACL",
+    "concept_tag": "Access Control List (ACL) Traffic Filtering",
+    "symptom": "Workstations cannot access web services (HTTP/HTTPS) due to restrictive packet filtering, despite successful ping connectivity.",
+    "expected_root_cause": "\u00a0An overly restrictive Access Control List (ACL) rule blocks Layer 4 HTTP/HTTPS \ntraffic between subnets.",
+    "osi_layer": "Layer 3"
+  },
+  {
+    "case_id": 18,
+    "category": "DHCP",
+    "concept_tag": "DHCP Pool Depletion & Lease Management",
+    "symptom": "\u00a0New devices fail to receive IP addresses, receiving APIPA (169.254.x.x) addresses due to exhausted lease pools.",
+    "expected_root_cause": "DHCP pool exhaustion caused by a restricted subnet range or missing exclusion\n boundaries.",
+    "osi_layer": "Layer 4 "
+  },
+  {
+    "case_id": 19,
+    "category": "Wireless",
+    "concept_tag": "Wireless LAN Security & Authentication Management\u00a0",
+    "symptom": "Wireless clients associate with the SSID but fail authentication and IP assignment due to security key/encryption mismatches.",
+    "expected_root_cause": "Wireless security mode, encryption type, or pre-shared key mismatch \nbetween client profile and access point.",
+    "osi_layer": "Layer 2"
+  },
+  {
+    "case_id": 20,
+    "category": "VLAN",
+    "concept_tag": "VLAN Administration & Naming Conventions",
+    "symptom": "VLAN name or port description discrepancy causing documentation/management mismatches while data forwarding remains fully operational.",
+    "expected_root_cause": "Administrative documentation oversight or VLAN naming typo on the switch.",
+    "osi_layer": "Layer 2"
+  },
+  {
+    "case_id": 21,
+    "category": "NAT",
+    "concept_tag": "Network Address Translation (NAT/PAT) Configuration",
+    "symptom": "Internal hosts fail to reach external networks due to missing or misconfigured NAT overload (PAT) rules, while local routing succeeds.",
+    "expected_root_cause": "Missing Network Address Translation Overload (PAT) configuration or incorrect inside/\noutside interface assignments on the edge router.",
+    "osi_layer": "Layer 3"
+  },
+  {
+    "case_id": 22,
+    "category": "DNS",
+    "concept_tag": "Static DNS Record Management & Name Resolution",
+    "symptom": "Clients fail to resolve domain names to correct IP addresses due to static record typos, while direct IP communication succeeds.",
+    "expected_root_cause": "Static DNS record typographical error or incorrect IP binding in the local name resolution table.",
+    "osi_layer": "Layer 7"
+  },
+  {
+    "case_id": 23,
+    "category": "DHCP",
+    "concept_tag": "Dynamic Host Configuration Protocol & Address Pool Management",
+    "symptom": "Workstations fail to acquire dynamic IP addresses, receiving APIPA addresses due to pool exhaustion or overlapping static IP assignments.",
+    "expected_root_cause": "Missing or incorrectly configured ip dhcp excluded-address commands on the gateway router.",
+    "osi_layer": "Layer 7"
+  },
+  {
+    "case_id": 24,
+    "category": "Gateway",
+    "concept_tag": "Host IP Configuration & Default Gateway Management",
+    "symptom": "Workstation communicates locally on the VLAN but cannot reach remote subnets or gateway due to an incorrect gateway IP configured on the host.",
+    "expected_root_cause": "Incorrect default gateway IP address manually configured on the client host interface.",
+    "osi_layer": "Layer 3"
+  },
+  {
+    "case_id": 25,
+    "category": "Routing",
+    "concept_tag": "Static Routing & Subnet Mask Management",
+    "symptom": "Remote subnets unreachable due to an incorrect subnet mask configured on a static route.",
+    "expected_root_cause": "Typographical error in the subnet mask of a manually configured static route.",
+    "osi_layer": "Layer 3"
+  },
+  {
+    "case_id": 26,
+    "category": "VLAN",
+    "concept_tag": "Spanning Tree Protocol (STP) Root Bridge Election",
+    "symptom": "Network experiences intermittent broadcast storms and loops due to unstable root bridge elections.",
+    "expected_root_cause": "Missing or conflicting Spanning Tree Protocol (STP) priority configurations.",
+    "osi_layer": "Layer 2"
+  },
+  {
+    "case_id": 27,
+    "category": "Gateway",
+    "concept_tag": "IP Address Conflict Resolution",
+    "symptom": "PC0 and Server0 intermittently lose connectivity; ARP table shows flapping MAC addresses.",
+    "expected_root_cause": "Duplicate IP assignment on the subnet.",
+    "osi_layer": "Layer 3"
+  },
+  {
+    "case_id": 28,
+    "category": "Wireless",
+    "concept_tag": "Wireless Channel Management",
+    "symptom": "Wireless clients experience frequent disconnections and slow throughput due to high interference.",
+    "expected_root_cause": "Overlapping Wi-Fi channels causing co-channel interference.",
+    "osi_layer": "Layer 1 "
+  },
+  {
+    "case_id": 29,
+    "category": "Wireless",
+    "concept_tag": "Wireless SSID Management",
+    "symptom": "Wireless clients cannot discover the SSID automatically due to broadcast suppression.",
+    "expected_root_cause": "SSID broadcast suppression causing minor onboarding friction.",
+    "osi_layer": "Layer 2"
+  },
+  {
+    "case_id": 30,
+    "category": "DNS",
+    "concept_tag": "DNS Client Configuration",
+    "symptom": "Hostnames cannot be resolved, but IP connectivity works",
+    "expected_root_cause": "Incorrect DNS server address configured on client",
+    "osi_layer": "Layer 7"
+  }
+]

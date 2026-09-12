@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>NetSage AI | Analytics Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            background: #ffffff;
+            border-bottom: 1px solid #dfe5ee;
+            min-height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 34px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 9px;
+            background: #172033;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .brand-text h1 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .brand-text p {
+            font-size: 12px;
+            color: #718096;
+            margin-top: 3px;
+        }
+
+        .nav-area {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #667085;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px 4px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #172033;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 13px;
+            color: #475467;
+            margin-left: 8px;
+        }
+
+        .status-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #2e9b68;
+        }
+
+        .container {
+            width: min(1200px, calc(100% - 48px));
+            margin: 0 auto;
+            padding: 38px 0 50px;
+        }
+
+        .page-heading {
+            margin-bottom: 30px;
+        }
+
+        .eyebrow {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            color: #667085;
+            text-transform: uppercase;
+            margin-bottom: 9px;
+        }
+
+        .page-heading h2 {
+            font-size: 30px;
+            line-height: 1.2;
+            margin-bottom: 9px;
+        }
+
+        .page-heading p {
+            color: #667085;
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 720px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: #344054;
+            letter-spacing: 0.3px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 34px;
+        }
+
+        .metric-card {
+            background: #ffffff;
+            border: 1px solid #e1e7ef;
+            border-radius: 12px;
+            padding: 21px;
+            min-height: 132px;
+        }
+
+        .metric-label {
+            color: #667085;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+
+        .metric-value {
+            font-size: 29px;
+            font-weight: 700;
+            margin-top: 13px;
+            color: #172033;
+        }
+
+        .metric-description {
+            color: #98a2b3;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .charts-section {
+            margin-bottom: 34px;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+        }
+
+        .chart-card {
+            background: #ffffff;
+            border: 1px solid #e1e7ef;
+            border-radius: 13px;
+            padding: 22px;
+            min-width: 0;
+        }
+
+        .chart-header {
+            margin-bottom: 18px;
+        }
+
+        .chart-header h3 {
+            font-size: 16px;
+            color: #172033;
+            margin-bottom: 6px;
+        }
+
+        .chart-header p {
+            color: #667085;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 280px;
+            width: 100%;
+        }
+
+        .audit-section {
+            background: #ffffff;
+            border: 1px solid #e1e7ef;
+            border-radius: 13px;
+            overflow: hidden;
+        }
+
+        .audit-header {
+            padding: 22px 24px;
+            border-bottom: 1px solid #e8edf3;
+        }
+
+        .audit-header h3 {
+            font-size: 17px;
+            margin-bottom: 6px;
+        }
+
+        .audit-header p {
+            color: #667085;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th {
+            text-align: left;
+            background: #f8fafc;
+            color: #667085;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            font-weight: 700;
+            padding: 13px 18px;
+            border-bottom: 1px solid #e5eaf0;
+        }
+
+        td {
+            padding: 15px 18px;
+            border-bottom: 1px solid #edf1f5;
+            font-size: 13px;
+            color: #344054;
+            vertical-align: top;
+        }
+
+        tbody tr:hover {
+            background: #fafcff;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .case-id {
+            font-weight: 700;
+            color: #172033;
+        }
+
+        .log-id {
+            color: #98a2b3;
+            font-size: 12px;
+        }
+
+        .decision {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 9px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .decision.accepted {
+            background: #edf8f2;
+            color: #237a52;
+        }
+
+        .decision.edited {
+            background: #fff7e8;
+            color: #9a6700;
+        }
+
+        .decision.rejected {
+            background: #fef0f0;
+            color: #b42318;
+        }
+
+        .decision.unknown {
+            background: #f2f4f7;
+            color: #667085;
+        }
+
+        .timestamp {
+            white-space: nowrap;
+            color: #475467;
+            font-size: 12px;
+            font-weight: 500;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .timestamp-empty {
+            color: #98a2b3;
+            font-style: italic;
+            font-weight: 400;
+        }
+
+        .notes {
+            max-width: 360px;
+            line-height: 1.5;
+            color: #667085;
+            word-break: break-word;
+        }
+
+        .empty-state {
+            padding: 50px 24px;
+            text-align: center;
+            color: #667085;
+        }
+
+        .empty-state strong {
+            display: block;
+            color: #344054;
+            margin-bottom: 7px;
+            font-size: 14px;
+        }
+
+        .empty-state span {
+            font-size: 13px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #98a2b3;
+            font-size: 11px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 900px) {
+
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .topbar {
+                padding: 0 20px;
+            }
+
+            .nav-area {
+                gap: 12px;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .container {
+                width: min(100% - 28px, 1200px);
+                padding-top: 25px;
+            }
+
+            .topbar {
+                height: auto;
+                min-height: 70px;
+                padding: 14px;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .brand-text p {
+                display: none;
+            }
+
+            .nav-area {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .status {
+                margin-left: 0;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-heading h2 {
+                font-size: 25px;
+            }
+
+            .chart-card {
+                padding: 16px;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                NS
+            </div>
+
+            <div class="brand-text">
+
+                <h1>
+                    NetSage AI
+                </h1>
+
+                <p>
+                    AI-Assisted Cisco Network Troubleshooting
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <nav class="nav-area">
+
+            <a
+                href="{{ url_for('index') }}"
+                class="nav-link"
+            >
+                Troubleshoot
+            </a>
+
+            <a
+                href="{{ url_for('analytics') }}"
+                class="nav-link active"
+            >
+                Analytics
+            </a>
+
+            <div class="status">
+
+                <span class="status-dot"></span>
+
+                System Online
+
+            </div>
+
+        </nav>
+
+    </header>
+
+
+    <main class="container">
+
+        <section class="page-heading">
+
+            <div class="eyebrow">
+                Performance Metrics
+            </div>
+
+            <h2>
+                Diagnostics Analytics Dashboard
+            </h2>
+
+            <p>
+                Review system performance and human-in-the-loop
+                review logs across troubleshooting runs.
+            </p>
+
+        </section>
+
+        <section>
+
+            <div class="section-title">
+                Metrics
+            </div>
+
+            <div class="metrics-grid">
+
+                <div class="metric-card">
+
+                    <div class="metric-label">
+                        Total Reviews
+                    </div>
+
+                    <div class="metric-value">
+                        {{
+                            metrics.total_reviews
+                            if metrics is defined
+                            else 0
+                        }}
+                    </div>
+
+                    <div class="metric-description">
+                        Logged human decisions
+                    </div>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <div class="metric-label">
+                        Acceptance Rate
+                    </div>
+
+                    <div class="metric-value">
+                        {{
+                            metrics.acceptance_rate
+                            if metrics is defined
+                            else "0.0%"
+                        }}
+                    </div>
+
+                    <div class="metric-description">
+                        Accepted without edits
+                    </div>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <div class="metric-label">
+                        Edited Rate
+                    </div>
+
+                    <div class="metric-value">
+                        {{
+                            metrics.edited_rate
+                            if metrics is defined
+                            else "0.0%"
+                        }}
+                    </div>
+
+                    <div class="metric-description">
+                        Adjusted by engineers
+                    </div>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <div class="metric-label">
+                        Rejection Rate
+                    </div>
+
+                    <div class="metric-value">
+                        {{
+                            metrics.rejection_rate
+                            if metrics is defined
+                            else "0.0%"
+                        }}
+                    </div>
+
+                    <div class="metric-description">
+                        Requires prompt tuning
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="charts-section">
+
+            <div class="section-title">
+                Visual Analytics
+            </div>
+
+            <div class="charts-grid">
+
+                <div class="chart-card">
+
+                    <div class="chart-header">
+
+                        <h3>
+                            Decision Rates
+                        </h3>
+
+                        <p>
+                            Percentage comparison of accepted,
+                            edited, and rejected reviews.
+                        </p>
+
+                    </div>
+
+                    <div class="chart-container">
+
+                        <canvas
+                            id="decisionRatesChart"
+
+                            data-accepted="{{
+                                metrics.acceptance_rate
+                                | default('0.0%', true)
+                                | replace('%', '')
+                            }}"
+
+                            data-edited="{{
+                                metrics.edited_rate
+                                | default('0.0%', true)
+                                | replace('%', '')
+                            }}"
+
+                            data-rejected="{{
+                                metrics.rejection_rate
+                                | default('0.0%', true)
+                                | replace('%', '')
+                            }}"
+                        ></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="audit-section">
+
+            <div class="audit-header">
+
+                <div class="eyebrow">
+                    Audit Trail
+                </div>
+
+                <h3>
+                    Human Review Logs
+                </h3>
+
+                <p>
+                    Historical log entries of AI-generated
+                    diagnoses validated, edited, or rejected
+                    by network engineers.
+                </p>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                {% if review_logs and review_logs|length > 0 %}
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Log ID
+                                </th>
+
+                                <th>
+                                    Case ID
+                                </th>
+
+                                <th>
+                                    Decision
+                                </th>
+
+                                <th>
+                                    Timestamp
+                                </th>
+
+                                <th>
+                                    Reviewer Notes
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for log in review_logs %}
+
+                                <tr>
+
+                                    <td>
+
+                                        <span class="log-id">
+                                            #{{ log.id }}
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="case-id">
+                                            {{ log.case_id }}
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        {% set decision =
+                                            log.decision|string|lower|trim
+                                        %}
+
+                                        {% if decision == "accepted" %}
+
+                                            <span class="decision accepted">
+                                                Accepted
+                                            </span>
+
+                                        {% elif decision == "edited" %}
+
+                                            <span class="decision edited">
+                                                Edited
+                                            </span>
+
+                                        {% elif decision == "rejected" %}
+
+                                            <span class="decision rejected">
+                                                Rejected
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="decision unknown">
+                                                {{ log.decision or "Unknown" }}
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        {% if log.timestamp %}
+
+                                            <span class="timestamp">
+                                                {{ log.timestamp }}
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="timestamp timestamp-empty">
+                                                Not recorded
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="notes">
+
+                                            {{
+                                                log.notes
+                                                or "No notes provided."
+                                            }}
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                {% else %}
+
+                    <div class="empty-state">
+
+                        <strong>
+                            No human review logs recorded yet.
+                        </strong>
+
+                        <span>
+                            Use the troubleshooting console to
+                            submit validations.
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+        <div class="footer">
+
+            NetSage AI · Cisco Network Troubleshooting
+            &amp; Human Review System
+
+        </div>
+
+    </main>
+
+    <script src="{{ url_for('static', filename='js/analytics.js') }}"></script>
+
+</body>
+
+</html>
