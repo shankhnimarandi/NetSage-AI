@@ -78,6 +78,11 @@ def index():
     )
 
 
+@app.route('/health')
+def health_check():
+    return "OK", 200
+
+
 @app.route("/diagnose", methods=["POST"])
 def diagnose():
     """Handle diagnosis requests using Gemini, RAG, and rule checking."""
