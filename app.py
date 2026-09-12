@@ -24,7 +24,6 @@ review_manager = ReviewManager()
 
 
 def get_normalized_cases():
-    """Load cases and normalize column headers to prevent blank fields."""
     df = retrieval_engine.cases_df
 
     if df is not None and not df.empty:
@@ -69,7 +68,6 @@ def get_normalized_cases():
 
 @app.route("/")
 def index():
-    """Render the network troubleshooting console."""
     cases = get_normalized_cases()
 
     return render_template(
@@ -85,7 +83,6 @@ def health_check():
 
 @app.route("/diagnose", methods=["POST"])
 def diagnose():
-    """Handle diagnosis requests using Gemini, RAG, and rule checking."""
     data = request.get_json() or {}
 
     case_id = data.get("case_id", "CUSTOM-CASE")
@@ -126,7 +123,6 @@ def diagnose():
 
 @app.route("/submit_review", methods=["POST"])
 def submit_review():
-    """Save human review decisions."""
     if request.is_json:
         data = request.get_json() or {}
     else:
@@ -172,15 +168,10 @@ def submit_review():
 
 @app.route("/analytics")
 def analytics():
-    """Render the analytics dashboard with metrics and audit logs."""
-
     review_logs = ReviewManager.get_all_reviews()
     metrics = ReviewManager.get_metrics()
     analytics_stats = ReviewManager.get_analytics_stats()
 
-    # ---------------------------------------------------------
-    # Prepare case distribution data
-    # ---------------------------------------------------------
     df = retrieval_engine.cases_df
 
     if df is not None and not df.empty:
@@ -232,9 +223,6 @@ def analytics():
         severity_distribution = {}
         total_cases = 0
 
-    # ---------------------------------------------------------
-    # Render analytics dashboard
-    # ---------------------------------------------------------
     return render_template(
         "analytics.html",
         review_logs=review_logs,
