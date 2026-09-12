@@ -1,0 +1,66 @@
+case_id,category,symptom,root_casue,confidence,evidence,next_command,fix_steps
+1,Gateway,PC0 cannot reach router gateway 192.168.1.1,"The router's GigabitEthernet0/0 interface is administratively shut down, preventing any layer 1 or layer 2 connectivity between the router and Switch0.",High,"The show command output explicitly states 'GigabitEthernet0/0 is administratively down, line protocol is down', which confirms the interface has been manually disabled via configuration.",show running-config interface GigabitEthernet0/0,"Enter global configuration mode on the router using 'configure terminal'.
+Enter interface configuration mode for the affected interface using 'interface GigabitEthernet0/0'.
+Enable the interface by executing the 'no shutdown' command.
+Verify the interface status changes to up using 'show ip interface brief'."
+2,VLAN,PC0 cannot ping PC1 or gateway; ping times out completely,Native VLAN mismatch on trunk link and misconfigured PC default gateway,High,"The switch console explicitly reported the CDP error: %CDP-4-NATIVE_VLAN_MISMATCH: Native VLAN mismatch discovered on FastEthernet0/3 (99), with Switch FastEthernet0/1 (10)",show interfaces trunk,"Access the CLI of Switch1 and enter global configuration mode using configure terminal.
+Navigate to the trunk port using interface 
+FastEthernet0/1.
+Configure the native VLAN to match Switch0 by 
+running switchport trunk native vlan 99.
+Verify and update the PC's default gateway 
+settings if required."
+3,VLAN,PC0 cannot ping PC1; ping results in 100% packet loss,"The switch port FastEthernet0/2 connected to PC1 is assigned to the incorrect VLAN (VLAN 10 instead of VLAN 20), causing a VLAN mismatch preventing
+communication.",High,Show commands output explicitly states: 'FastEthernet0/2 is assigned to VLAN 10 instead of VLAN 20'.,show vlan brief,"Access the configuration mode of Switch1, 
+enter interface FastEthernet0/2, and 
+execute the command 'switchport access 
+vlan 20' to correct the VLAN assignment."
+,,,,,,,
+7,VLAN,"PC0 on the local network cannot ping its default gateway or other devices in its intended subnet, resulting in ""Request timed out"" errors during ping tests.",PC0's access port on Switch0 (FastEthernet0/2) is incorrectly assigned to VLAN 20 instead of the required VLAN 10 for the 192.168.10.0/24 subnet.,High,"The 'show vlan brief' and 'show interfaces fastethernet0/2 switchport' commands show that FastEthernet0/2 is assigned to Access Mode VLAN 20, causing a mismatch with the device's 
+intended subnet.",show running-config interface fastethernet0/2,"Access Switch0 CLI. 
+Enter global configuration mode using 'configure terminal'. 
+ Access interface FastEthernet0/2 using 'interface fastethernet0/2'.
+Assign the port to the correct VLAN using 'switchport access vlan 10'. 
+Exit configuration mode and save changes using 'write memory'."
+30,DNS,"Hostnames cannot be resolved, but IP connectivity works","The client PC has a valid IP address and default gateway configured, but the DNS server IP address is incorrectly set, preventing domain name 
+resolution while allowing direct IP connectivity.",High,"Symptom indicates hostnames cannot be resolved while IP connectivity works. Topology notes confirm that the PC has a valid IP/gateway but an incorrect DNS server configured. Historical 
+cases (Case 30, Case 9, and Case 22) similarly involve working IP connectivity failing during DNS name resolution.",ipconfig/all,"Access the desktop configuration on the 
+affected PC in Packet Tracer.
+Navigate to IP Configuration.
+Locate the DNS Server field and update it with 
+the correct, reachable DNS server IP address.
+Verify resolution using 'nslookup 
+www.example.com' from the command prompt."
+8,ACL,"Hosts in VLAN 10 (192.168.10.0/24) cannot ping devices or servers in VLAN 20 (192.168.20.0/24), resulting in ""Request timed out"" messages.","An active Extended Access Control List (ACL 100) is applied to the router subinterface (GigabitEthernet0/0.10) which explicitly denies ICMP traffic 
+between VLANs, preventing hosts in VLAN 10 from pinging VLAN 20.",High,"show ip interface gigabitethernet0/0.10 indicates 'Outbound access list is 100', and show access-lists confirms 'Extended IP access list 100 deny icmp any any'.",conf t interface gigabitethernet0/0.10 no ip access-group 100 out,"Access the router CLI in global configuration 
+mode, enter the subinterface configuration for 
+GigabitEthernet0/0.10, and remove the ACL 
+filter using the 'no ip access-group 100 out' 
+command. Alternatively, modify the ACL to 
+permit ICMP traffic if security policies require 
+filtering rather than a complete removal."
+10,VLAN,"PC connected to Switch port FastEthernet0/1 suddenly loses network connectivity, and the port status shows as down.","Port security violation triggered on Switch0 FastEthernet0/1 because an unauthorized device exceeded the maximum configured MAC address limit of 
+1, placing the port in err-disabled state.",High,"The command 'show interfaces fastethernet0/1' indicates the port status is down and line protocol is down (err-disabled). Furthermore, 'show port-security interface fastethernet0/1' confirms the Port Status is Secure-down and the Violation Mode is Shutdown, matching historical Case 10 symptoms of port security violations.",shutdown,"Disconnect the unauthorized device from 
+FastEthernet0/1. Access the switch CLI 
+and enter global configuration mode. 
+Enter interface configuration mode for 
+FastEthernet0/1 ('interface fastethernet0/1'). 
+Execute the 'shutdown' command followed 
+by the 'no shutdown' command to reset the 
+err-disabled state. Verify connectivity 
+and port status using 'show interfaces 
+fastethernet0/1'."
+11,DHCP,"Client PCs configured for DHCP successfully obtain an automatic IPv4 address from the router's DHCP pool, but experience 100% packet loss and ""Request timed out"" when attempting to ping their 
+default gateway or any remote networks.","The DHCP pool configuration on Router0 is missing the 'default-router' command, causing client PCs to obtain an IP address but lack a default gateway configuration required for off-subnet or gateway communication.",High,"show running-config output shows the default-router statement is missing from ip dhcp pool VLAN10_POOL, and client ipconfig output confirms the Default Gateway field is blank or missing.",configure terminal,"Access the router CLI and enter global 
+configuration mode using 'configure 
+terminal'. Enter the DHCP pool 
+configuration mode with 'ip dhcp pool 
+VLAN10_POOL'. Add the missing default 
+gateway command using 'default-router 
+192.168.10.1' (assuming 192.168.10.1 is 
+the router's SVI/interface IP). Exit 
+configuration mode and save the 
+configuration using 'write memory'.On the 
+client PCs, release and renew the IP 
+address using 'ipconfig /release' and 
+'ipconfig /renew'."
