@@ -1,9 +1,0 @@
-Flask
-pandas
-numpy
-scikit-learn
-SQLAlchemy
-python-dotenv
-google-generativeai
-gunicorn
-tzdata
