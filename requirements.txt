@@ -1,10 +1,11 @@
 Flask
+Flask-SQLAlchemy
 pandas
 numpy
 scikit-learn
 SQLAlchemy
 python-dotenv
 google-genai
+faiss-cpu
 gunicorn
 tzdata
-faiss-cpu
