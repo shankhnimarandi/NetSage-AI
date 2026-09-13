@@ -63,8 +63,6 @@ flowchart TD
     class REVIEW review
 ```
 
-## Project Structure
-
 
 ## 📁 Project Structure
 
