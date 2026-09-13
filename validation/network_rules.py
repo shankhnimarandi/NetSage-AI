@@ -1,13 +1,10 @@
 import pandas as pd
 
-class NetworkRuleChecker:
-    """Performs deterministic network rule checks on configuration or show-command outputs."""
-    
+class NetworkRuleChecker:    
     def __init__(self):
         pass
 
     def check_all(self, show_outputs: str = "", symptom: str = "") -> list:
-        """Runs a suite of heuristic or pattern-based checks on telemetry outputs."""
         findings = []
         
         outputs_lower = show_outputs.lower() if show_outputs else ""
@@ -44,7 +41,6 @@ class NetworkRuleChecker:
         return findings
 
 def check_ip_configuration(df):
-    """Validates if IP addresses and subnet masks are properly formatted or provided."""
     issues = []
     if df.empty:
         return issues
@@ -62,7 +58,6 @@ def check_ip_configuration(df):
     return issues
 
 def run_all_checks(df):
-    """Executes all network validation rule checks on the dataset or inputs."""
     all_issues = []
     all_issues.extend(check_ip_configuration(df))
     return all_issues
