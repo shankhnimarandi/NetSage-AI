@@ -18,6 +18,7 @@ NetSage AI is an intelligent, AI-assisted network troubleshooting and diagnostic
 - Hosting & Automation: Render Cloud Platform, Cron-Job.org (Health-check pinging)
 
 ## System Architecture
+
 [ User Interface ] ---> [ Flask Application Core ]
                                 |
         +-----------------------+-----------------------+
