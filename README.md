@@ -1,0 +1,2 @@
+# NetSage AI: AI-Assisted Network Troubleshooting Platform
+NetSage AI is an intelligent, AI-assisted network troubleshooting and diagnostic platform engineered specifically for Cisco Packet Tracer and lab networking environments. It bridges the gap between traditional networking education and modern artificial intelligence by combining deterministic rule-checking, vector-based similarity search (RAG), and mandatory human-in-the-loop validation.
