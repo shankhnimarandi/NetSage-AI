@@ -19,18 +19,48 @@ NetSage AI is an intelligent, AI-assisted network troubleshooting and diagnostic
 
 ## System Architecture
 
-[ User Interface ] ---> [ Flask Application Core ]
-                                |
-        +-----------------------+-----------------------+
-        |                       |                       |
-        v                       v                       v
-[ Case Dataset ]       [ FAISS RAG Engine ]    [ Rule Checker ]
- (`cases.csv`)        (Vector Similarity)    (`network_rules.py`)
-        \                       |                       /
-         +-----------------> [ Gemini AI ] <------------+
-                       (Structured JSON Output)
-                                |
-                                v
-                     [ Human Review & Audit ]
-                      (`human_reviews_log.csv`)
+
+## NetSage AI Architecture
+
+```mermaid
+flowchart TD
+    UI["User Interface<br/>HTML/CSS Templates & Interactive Console"]
+    CORE["Flask Application Core<br/>app.py"]
+
+    DATA["Case Dataset<br/>cases.csv"]
+    RAG["FAISS RAG Engine<br/>Vector Similarity"]
+    RULES["Rule Checker<br/>network_rules.py"]
+
+    AI["Gemini AI Diagnosis<br/>Structured JSON Output"]
+    REVIEW["Human Review & Audit<br/>human_reviews_log.csv"]
+
+    UI --> CORE
+
+    CORE --> DATA
+    CORE --> RAG
+    CORE --> RULES
+
+    DATA --> AI
+    RAG --> AI
+    RULES --> AI
+
+    AI --> REVIEW
+
+    classDef ui fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+    classDef core fill:#ede9fe,stroke:#7c3aed,color:#4c1d95
+    classDef data fill:#ffedd5,stroke:#ea580c,color:#7c2d12
+    classDef rag fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef rules fill:#fee2e2,stroke:#dc2626,color:#7f1d1d
+    classDef ai fill:#fef3c7,stroke:#d97706,color:#78350f
+    classDef review fill:#e0e7ff,stroke:#4338ca,color:#1e1b4b
+
+    class UI ui
+    class CORE core
+    class DATA data
+    class RAG rag
+    class RULES rules
+    class AI ai
+    class REVIEW review
+```
+
   
