@@ -10,11 +10,26 @@ NetSage AI is an intelligent, AI-assisted network troubleshooting and diagnostic
 - Production-Ready Deployment: Hosted on Render using Gunicorn, backed by an automated keep-alive health check monitor.
 
 ## Technology Stack
-- ### Backend: Python, Flask, Jinja2 Templates
+- Backend: Python, Flask, Jinja2 Templates
 - AI & NLP: Google GenAI SDK (gemini-pro/gemini-2.5), Sentence Transformers
 - Vector Search: faiss-cpu
 - Database & Data Processing: SQLite (netsage.db), Pandas, NumPy
 - Frontend: HTML5, CSS3, Responsive Web UI
 - Hosting & Automation: Render Cloud Platform, Cron-Job.org (Health-check pinging)
 
+## System Architecture
+[ User Interface ] ---> [ Flask Application Core ]
+                                |
+        +-----------------------+-----------------------+
+        |                       |                       |
+        v                       v                       v
+[ Case Dataset ]       [ FAISS RAG Engine ]    [ Rule Checker ]
+ (`cases.csv`)        (Vector Similarity)    (`network_rules.py`)
+        \                       |                       /
+         +-----------------> [ Gemini AI ] <------------+
+                       (Structured JSON Output)
+                                |
+                                v
+                     [ Human Review & Audit ]
+                      (`human_reviews_log.csv`)
   
