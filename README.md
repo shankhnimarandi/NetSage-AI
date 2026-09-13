@@ -63,4 +63,55 @@ flowchart TD
     class REVIEW review
 ```
 
+## Project Structure
+
+NetSage-AI/
+├── ai/
+│   ├── __init__.py
+│   ├── gemini_service.py
+│   └── schemas.py
+├── data/
+│   ├── cases.csv
+│   ├── diagnosis.csv
+│   ├── human_reviews_log.csv
+│   └── netsage.db
+├── database/
+│   ├── __init__.py
+│   ├── database.py
+│   └── models.py
+├── prompts/
+│   └── diagnose_prompt.txt
+├── retrieval/
+│   ├── __init__.py
+│   └── case_retrieval.py
+├── review/
+│   ├── __init__.py
+│   └── review_manager.py
+├── static/
+│   ├── css/
+│   │   └── style.css
+│   └── js/
+│       ├── analytics.js
+│       └── main.js
+├── templates/
+│   ├── analytics.html
+│   └── index.html
+├── tests/
+│   ├── test_api.py
+│   ├── test_retrieval.py
+│   └── test_rules.py
+├── validation/
+│   ├── __init__.py
+│   └── network_rules.py
+├── vectorstore/
+│   ├── index.faiss
+│   └── metadata.json
+├── .env
+├── .gitignore
+├── README.md
+├── app.py
+├── config.py
+└── requirements.txt
+
+
   
