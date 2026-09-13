@@ -65,6 +65,10 @@ flowchart TD
 
 ## Project Structure
 
+
+## 📁 Project Structure
+
+```text
 NetSage-AI/
 ├── ai/
 │   ├── __init__.py
@@ -112,6 +116,4 @@ NetSage-AI/
 ├── app.py
 ├── config.py
 └── requirements.txt
-
-
-  
+```
